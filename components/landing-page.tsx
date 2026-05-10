@@ -4,9 +4,11 @@ import Image from "next/image";
 import {
   ArrowRight,
   BarChart3,
+  Building2,
   CheckCircle2,
   Code2,
   Compass,
+  Database,
   ExternalLink,
   Gauge,
   Globe2,
@@ -14,7 +16,10 @@ import {
   Layers3,
   LineChart,
   Mail,
+  MapPin,
+  MapPinned,
   PanelTop,
+  PhoneCall,
   RefreshCw,
   Search,
   Send,
@@ -44,76 +49,104 @@ const credibility = [
 const services: Array<{
   title: string;
   description: string;
+  includes: string[];
+  category: string;
   icon: LucideIcon;
 }> = [
   {
     title: "Small Business Websites",
     description:
-      "Clean, fast, trustworthy sites for local businesses that need to look established and make it easy for customers to act.",
+      "A polished online home for businesses that need trust, clarity, and better leads.",
+    includes: ["Hero + trust sections", "Service flow", "Contact path"],
+    category: "Core site",
     icon: Globe2
   },
   {
     title: "Landing Pages",
     description:
-      "Focused pages for campaigns, services, launches, and booking flows with clear copy and strong calls to action.",
+      "Focused pages for one offer, one audience, and one clear conversion goal.",
+    includes: ["Offer structure", "CTA strategy", "Fast launch"],
+    category: "Campaign",
     icon: PanelTop
   },
   {
     title: "Website Redesigns",
     description:
-      "Modernize an outdated site with sharper messaging, better structure, stronger visuals, and a smoother mobile experience.",
+      "A cleaner, faster rebuild when an existing site feels dated or hard to use.",
+    includes: ["UX cleanup", "Copy hierarchy", "Mobile polish"],
+    category: "Redesign",
     icon: RefreshCw
   },
   {
     title: "Technical SEO Setup",
     description:
-      "Semantic structure, metadata, indexing basics, performance hygiene, and Google Search Console foundations.",
+      "The technical foundation Google needs before content or local SEO can work well.",
+    includes: ["Metadata", "Indexing basics", "Search Console"],
+    category: "SEO",
     icon: Search
   },
   {
     title: "Hosting / Domains / Analytics",
     description:
-      "Help with domains, hosting, DNS, Google Analytics, Search Console, forms, booking links, and launch details.",
+      "The launch details handled cleanly so the site works in the real world.",
+    includes: ["DNS + hosting", "Analytics", "Forms / booking"],
+    category: "Launch",
     icon: Server
   },
   {
     title: "Custom Web Apps",
     description:
-      "Interactive tools, dashboards, map interfaces, data-backed pages, automations, and practical business workflows.",
+      "Practical custom functionality when a normal brochure site is not enough.",
+    includes: ["Dashboards", "Maps / search", "Data workflows"],
+    category: "Custom",
     icon: Code2
   },
   {
     title: "Ongoing Support",
     description:
-      "Monthly updates, monitoring, performance improvements, content changes, and practical technical help as your site grows.",
+      "Ongoing technical help after launch so the site can keep improving.",
+    includes: ["Content updates", "Monitoring", "Performance fixes"],
+    category: "Support",
     icon: Wrench
   }
 ];
 
-const projects = [
+type Project = {
+  title: string;
+  url: string;
+  description: string;
+  tags: string[];
+  accent: "emerald" | "gold" | "copper";
+  visual: "database" | "map" | "service";
+};
+
+const projects: Project[] = [
   {
     title: "ForkGrade",
     url: "https://forkgrade.com",
     description:
       "The largest independent health inspection database in the USA, updated daily and built around programmatic SEO, large-scale static pages, PostgreSQL, and a Flask/Python backend.",
     tags: ["Programmatic SEO", "PostgreSQL", "Python/Flask", "Daily ETL", "Performance"],
-    accent: "emerald"
+    accent: "emerald",
+    visual: "database"
   },
   {
     title: "InspectRI",
     url: "https://inspectri.com",
     description:
-      "A Rhode Island health inspection web app with an interactive Leaflet map, filters, search, public inspection data, local discovery, and daily updates.",
+      "A Rhode Island health inspection web app that turns public records into a searchable local discovery tool, with an interactive Leaflet map, practical filters, restaurant search, and daily data updates.",
     tags: ["Interactive UX", "Leaflet maps", "Public data", "Local search", "Daily updates"],
-    accent: "gold"
+    accent: "gold",
+    visual: "map"
   },
   {
-    title: "Gianni Site Demo",
+    title: "Honest Drain Demo",
     url: "https://cmbitton.github.io/gianni-site-demo/",
     description:
       "A polished local service business demo with responsive layout, trust-building sections, conversion-focused calls to action, and a structure ready to become a complete client site.",
     tags: ["Small business design", "Responsive", "CTA strategy", "Service pages", "Trust sections"],
-    accent: "copper"
+    accent: "copper",
+    visual: "service"
   }
 ];
 
@@ -228,23 +261,13 @@ type RevealProps = {
   id?: string;
   className?: string;
   children: React.ReactNode;
-  delay?: number;
 };
 
-function Reveal({ id, className = "", children, delay = 0 }: RevealProps) {
-  const reduceMotion = useReducedMotion();
-
+function Reveal({ id, className = "", children }: RevealProps) {
   return (
-    <motion.section
-      id={id}
-      className={className}
-      initial={reduceMotion ? false : { opacity: 0, y: 28 }}
-      whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.18 }}
-      transition={{ duration: 0.65, delay, ease: "easeOut" }}
-    >
+    <section id={id} className={className}>
       {children}
-    </motion.section>
+    </section>
   );
 }
 
@@ -258,7 +281,7 @@ function SectionHeader({
   copy: string;
 }) {
   return (
-    <div className="mx-auto mb-12 max-w-3xl text-center">
+    <div className="mx-auto mb-7 max-w-3xl text-center sm:mb-12">
       <p className="mb-3 text-sm font-semibold uppercase text-emerald">{eyebrow}</p>
       <h2 className="text-balance text-3xl font-semibold leading-[1.08] text-cream sm:text-4xl lg:text-5xl">
         {title}
@@ -312,7 +335,7 @@ function Header() {
           className="inline-flex items-center gap-2 rounded-md bg-cream px-4 py-2 text-sm font-semibold text-[#070806] transition hover:-translate-y-0.5 hover:bg-emerald focus-visible:outline-emerald"
         >
           <Mail aria-hidden="true" className="size-4" />
-          Start
+          Contact
         </a>
       </nav>
     </header>
@@ -325,7 +348,7 @@ function HeroVisual() {
   return (
     <motion.div
       aria-hidden="true"
-      className="relative mx-auto min-h-[560px] w-full max-w-[560px] sm:min-h-[520px]"
+      className="relative mx-auto hidden min-h-[520px] w-full max-w-[560px] lg:block"
       initial={reduceMotion ? false : { opacity: 0, x: 22 }}
       animate={reduceMotion ? undefined : { opacity: 1, x: 0 }}
       transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
@@ -433,16 +456,62 @@ function HeroVisual() {
   );
 }
 
+function MobileHeroSnapshot() {
+  return (
+    <div aria-hidden="true" className="mt-6 overflow-hidden rounded-lg border border-cream/12 bg-panel/82 shadow-[0_22px_70px_rgba(0,0,0,0.36)] lg:hidden">
+      <div className="flex h-10 items-center justify-between border-b border-cream/10 bg-cream/[0.04] px-4">
+        <div className="flex gap-2">
+          <span className="size-2 rounded-full bg-copper" />
+          <span className="size-2 rounded-full bg-gold" />
+          <span className="size-2 rounded-full bg-emerald" />
+        </div>
+        <span className="text-xs text-muted">launch-ready</span>
+      </div>
+      <div className="data-grid p-4">
+        <div className="grid grid-cols-[0.95fr_1.05fr] gap-3">
+          <div className="rounded-md border border-emerald/20 bg-emerald/10 p-3">
+            <p className="text-2xl font-semibold text-emerald">98</p>
+            <p className="mt-1 text-xs uppercase text-muted">speed score</p>
+          </div>
+          <div className="rounded-md border border-cream/10 bg-ink/62 p-3">
+            <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-cream">
+              <PhoneCall aria-hidden="true" className="size-4 text-gold" />
+              Call-ready path
+            </div>
+            <div className="space-y-2">
+              {[82, 64, 46].map((width, index) => (
+                <div key={width} className="h-2 rounded-full bg-cream/10">
+                  <div
+                    className={`h-full rounded-full ${index === 0 ? "bg-emerald" : index === 1 ? "bg-gold" : "bg-copper"}`}
+                    style={{ width: `${width}%` }}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="mt-3 grid grid-cols-3 gap-2 text-xs text-muted">
+          {["SEO", "Forms", "Hosting"].map((label) => (
+            <span key={label} className="rounded-md border border-cream/10 bg-ink/58 px-3 py-2 text-center">
+              {label}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Hero() {
   return (
-    <section id="top" className="relative overflow-hidden pt-28 sm:pt-32">
-      <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 pb-20 sm:px-6 lg:grid-cols-[1.03fr_0.97fr] lg:px-8 lg:pb-28">
+    <section id="top" className="hero-stage relative overflow-hidden pt-24 sm:pt-28 lg:pt-32">
+      <div className="mx-auto grid max-w-7xl items-center gap-10 px-5 pb-12 sm:px-6 sm:pb-20 lg:grid-cols-[1.03fr_0.97fr] lg:px-8 lg:pb-28">
         <div>
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, ease: "easeOut" }}
-            className="mb-6 inline-flex items-center gap-3 rounded-full border border-emerald/25 bg-emerald/10 px-4 py-2 text-sm text-emerald"
+            className="mb-5 inline-flex items-center gap-3 rounded-full border border-emerald/25 bg-emerald/10 px-4 py-2 text-sm text-emerald sm:mb-6"
           >
             <span className="size-2 rounded-full bg-emerald shadow-[0_0_18px_rgba(79,211,182,0.8)]" />
             Limited local/founding-client projects open
@@ -452,26 +521,34 @@ function Hero() {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: "easeOut", delay: 0.06 }}
-            className="text-balance text-5xl font-semibold leading-[0.98] text-cream sm:text-6xl lg:text-7xl"
+            className="text-balance text-[2.75rem] font-semibold leading-[0.98] text-cream sm:text-6xl lg:text-7xl"
           >
-            I build fast, modern websites for small businesses.
+            <span className="sm:hidden">Fast, modern websites for small businesses.</span>
+            <span className="hidden sm:inline">I build fast, modern websites for small businesses.</span>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: "easeOut", delay: 0.14 }}
-            className="mt-6 max-w-2xl text-pretty text-lg leading-8 text-muted sm:text-xl"
+            className="mt-5 max-w-2xl text-pretty text-base leading-7 text-muted sm:mt-6 sm:text-xl sm:leading-8"
           >
-            Custom-coded websites that help local businesses look professional,
-            load fast, and turn visitors into calls, bookings, and leads.
+            <span className="sm:hidden">
+              Custom-coded sites that look polished, load fast, and turn visitors into calls.
+            </span>
+            <span className="hidden sm:inline">
+              Custom-coded websites that help local businesses look professional,
+              load fast, and turn visitors into calls, bookings, and leads.
+            </span>
           </motion.p>
+
+          <MobileHeroSnapshot />
 
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: "easeOut", delay: 0.22 }}
-            className="mt-9 flex flex-col gap-3 sm:flex-row"
+            className="mt-6 flex flex-col gap-3 sm:mt-9 sm:flex-row"
           >
             <a
               href="#contact"
@@ -494,7 +571,7 @@ function Hero() {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: "easeOut", delay: 0.3 }}
-            className="mt-9 grid max-w-2xl grid-cols-1 gap-3 sm:grid-cols-2"
+            className="mt-6 hidden max-w-2xl grid-cols-1 gap-3 sm:mt-9 sm:grid sm:grid-cols-2"
           >
             {credibility.map((item) => (
               <div
@@ -525,10 +602,9 @@ function TrustStrip() {
 
   return (
     <Reveal className="border-y border-cream/10 bg-cream/[0.025]">
-      <div className="mx-auto flex max-w-7xl flex-col gap-6 px-5 py-8 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+      <div className="mx-auto flex max-w-7xl flex-col gap-6 px-5 py-7 sm:px-6 sm:py-8 lg:flex-row lg:items-center lg:justify-between lg:px-8">
         <p className="max-w-2xl text-pretty text-xl font-medium leading-8 text-cream">
-          Design, development, hosting, analytics, and technical SEO handled end
-          to end, so your site feels professional without becoming your second job.
+          Design, development, hosting, analytics, and technical SEO handled end to end.
         </p>
         <div className="flex flex-wrap gap-3">
           {items.map(({ label, icon: Icon }) => (
@@ -548,22 +624,38 @@ function TrustStrip() {
 
 function Services() {
   return (
-    <Reveal id="services" className="px-5 py-24 sm:px-6 lg:px-8">
+    <Reveal id="services" className="px-5 py-12 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
       <div className="mx-auto max-w-7xl">
         <SectionHeader
           eyebrow="Services"
-          title="Everything a small business website needs, without the technical headache."
-          copy="From the first page structure to the final launch settings, the work is built around clarity, speed, trust, and conversion."
+          title="A complete website, handled end to end."
+          copy="Design, development, launch setup, SEO basics, analytics, and forms in one clean build."
         />
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {services.map(({ title, description, icon }) => (
+          {services.map(({ title, description, includes, category, icon }) => (
             <article
               key={title}
-              className="glass-card group p-6 transition duration-300 hover:-translate-y-1 hover:border-emerald/35"
+              className="glass-card group flex min-h-[258px] flex-col p-5 transition duration-300 hover:-translate-y-1 hover:border-emerald/35 sm:p-6"
             >
-              <IconBadge icon={icon} />
-              <h3 className="mt-6 text-xl font-semibold text-cream">{title}</h3>
-              <p className="mt-3 text-pretty text-sm leading-7 text-muted">{description}</p>
+              <div className="flex items-start justify-between gap-4">
+                <IconBadge icon={icon} />
+                <span className="rounded-full border border-gold/20 bg-gold/10 px-3 py-1 text-xs font-semibold uppercase text-gold">
+                  {category}
+                </span>
+              </div>
+              <h3 className="mt-5 text-xl font-semibold text-cream">{title}</h3>
+              <p className="mt-3 text-pretty text-sm leading-6 text-muted">{description}</p>
+              <div className="mt-5 grid gap-2">
+                {includes.map((item) => (
+                  <div
+                    key={item}
+                    className="flex items-center gap-2 rounded-md border border-cream/10 bg-ink/55 px-3 py-2 text-sm text-cream"
+                  >
+                    <CheckCircle2 aria-hidden="true" className="size-3.5 shrink-0 text-emerald" />
+                    <span>{item}</span>
+                  </div>
+                ))}
+              </div>
             </article>
           ))}
         </div>
@@ -572,41 +664,137 @@ function Services() {
   );
 }
 
-function ProjectPreview({ accent, title }: { accent: string; title: string }) {
-  const accentClass =
-    accent === "gold"
-      ? "from-gold/35 via-gold/10"
-      : accent === "copper"
-        ? "from-copper/35 via-copper/10"
-        : "from-emerald/35 via-emerald/10";
+function ProjectPreview({ project }: { project: Project }) {
+  const accent =
+    project.accent === "gold"
+      ? {
+          bg: "bg-gold/15",
+          border: "border-gold/30",
+          dot: "bg-gold",
+          from: "from-gold/32 via-gold/10",
+          text: "text-gold"
+        }
+      : project.accent === "copper"
+        ? {
+            bg: "bg-copper/15",
+            border: "border-copper/30",
+            dot: "bg-copper",
+            from: "from-copper/32 via-copper/10",
+            text: "text-copper"
+          }
+        : {
+            bg: "bg-emerald/15",
+            border: "border-emerald/30",
+            dot: "bg-emerald",
+            from: "from-emerald/32 via-emerald/10",
+            text: "text-emerald"
+          };
 
   return (
-    <div className={`mesh-panel relative h-56 overflow-hidden border-b border-cream/10 bg-gradient-to-br ${accentClass} to-transparent p-5`}>
+    <div className={`mesh-panel relative h-60 overflow-hidden border-b border-cream/10 bg-gradient-to-br ${accent.from} to-transparent p-5`}>
       <div className="absolute inset-0 data-grid opacity-45" />
-      <div className="relative flex h-full flex-col justify-between">
-        <div className="flex items-center justify-between">
-          <div className="rounded-md border border-cream/12 bg-ink/58 px-3 py-2 text-sm font-semibold text-cream">
-            {title}
+      <div className="relative flex h-full flex-col">
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <div className={`inline-flex items-center gap-2 rounded-md border ${accent.border} ${accent.bg} px-3 py-2 text-sm font-semibold text-cream`}>
+            <span className={`size-2 rounded-full ${accent.dot}`} />
+            {project.title}
           </div>
-          <div className="flex gap-2">
-            <span className="size-2 rounded-full bg-emerald" />
-            <span className="size-2 rounded-full bg-gold" />
-            <span className="size-2 rounded-full bg-copper" />
-          </div>
+          {project.visual === "database" ? (
+            <Database aria-hidden="true" className={`size-5 ${accent.text}`} />
+          ) : project.visual === "map" ? (
+            <MapPinned aria-hidden="true" className={`size-5 ${accent.text}`} />
+          ) : (
+            <Building2 aria-hidden="true" className={`size-5 ${accent.text}`} />
+          )}
         </div>
-        <div className="grid grid-cols-[1.1fr_0.9fr] gap-3">
-          <div className="space-y-2">
-            <div className="h-3 w-5/6 rounded-full bg-cream/28" />
-            <div className="h-3 w-2/3 rounded-full bg-cream/18" />
-            <div className="h-3 w-3/4 rounded-full bg-cream/14" />
+
+        {project.visual === "database" ? (
+          <div className="grid flex-1 grid-cols-[0.8fr_1.2fr] gap-3">
+            <div className="space-y-3">
+              {[
+                ["1.8M+", "pages"],
+                ["daily", "ETL"],
+                ["SEO", "scale"]
+              ].map(([value, label]) => (
+                <div key={label} className="rounded-md border border-cream/10 bg-ink/58 p-3">
+                  <p className={`text-lg font-semibold ${accent.text}`}>{value}</p>
+                  <p className="mt-1 text-xs uppercase text-muted">{label}</p>
+                </div>
+              ))}
+            </div>
+            <div className="rounded-lg border border-cream/10 bg-ink/62 p-3">
+              <div className="mb-3 flex items-center gap-2 rounded-md border border-cream/10 bg-cream/[0.04] px-3 py-2">
+                <Search aria-hidden="true" className="size-4 text-muted" />
+                <span className="text-xs text-muted">search inspections</span>
+              </div>
+              <div className="space-y-2">
+                {[92, 76, 64, 84].map((width, index) => (
+                  <div key={width} className="flex items-center gap-2 rounded-md border border-cream/10 bg-cream/[0.035] px-3 py-2">
+                    <span className={`size-2 rounded-full ${index === 1 ? "bg-gold" : accent.dot}`} />
+                    <span className="h-2 rounded-full bg-cream/18" style={{ width: `${width}%` }} />
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-          <div className="grid grid-cols-2 gap-2">
-            <div className="h-16 rounded-md border border-cream/10 bg-ink/52" />
-            <div className="h-16 rounded-md border border-cream/10 bg-cream/10" />
-            <div className="h-16 rounded-md border border-cream/10 bg-cream/10" />
-            <div className="h-16 rounded-md border border-cream/10 bg-ink/52" />
+        ) : null}
+
+        {project.visual === "map" ? (
+          <div className="grid flex-1 grid-cols-[0.78fr_1.22fr] gap-3">
+            <div className="rounded-lg border border-cream/10 bg-ink/62 p-3">
+              <div className="mb-3 h-8 rounded-md border border-cream/10 bg-cream/[0.04]" />
+              <div className="space-y-2">
+                {[68, 88, 55].map((width) => (
+                  <div key={width} className="h-9 rounded-md border border-cream/10 bg-cream/[0.035] p-2">
+                    <div className="h-2 rounded-full bg-cream/18" style={{ width: `${width}%` }} />
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="relative overflow-hidden rounded-lg border border-cream/10 bg-ink/62">
+              <div className="absolute inset-0 data-grid opacity-35" />
+              <div className="absolute left-8 top-7 h-28 w-28 rotate-[-12deg] rounded-[45%_55%_42%_58%] border border-gold/40 bg-gold/12" />
+              {[
+                ["62%", "34%"],
+                ["47%", "52%"],
+                ["66%", "65%"],
+                ["38%", "42%"]
+              ].map(([left, top], index) => (
+                <span
+                  key={`${left}-${top}`}
+                  className={`absolute flex size-6 items-center justify-center rounded-full border border-cream/20 ${index === 0 ? "bg-emerald/35 text-emerald" : "bg-gold/25 text-gold"}`}
+                  style={{ left, top }}
+                >
+                  <MapPin aria-hidden="true" className="size-3.5" />
+                </span>
+              ))}
+            </div>
           </div>
-        </div>
+        ) : null}
+
+        {project.visual === "service" ? (
+          <div className="flex flex-1 flex-col justify-between rounded-lg border border-cream/10 bg-ink/62 p-4">
+            <div className="grid grid-cols-[1fr_0.7fr] gap-3">
+              <div>
+                <div className="h-4 w-5/6 rounded-full bg-cream/24" />
+                <div className="mt-3 h-3 w-full rounded-full bg-cream/14" />
+                <div className="mt-2 h-3 w-2/3 rounded-full bg-cream/14" />
+              </div>
+              <div className="rounded-md border border-copper/25 bg-copper/12 p-3">
+                <PhoneCall aria-hidden="true" className="mb-3 size-5 text-copper" />
+                <div className="h-2 w-full rounded-full bg-cream/20" />
+                <div className="mt-2 h-2 w-2/3 rounded-full bg-cream/14" />
+              </div>
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              {["Trust", "Services", "Quote"].map((label) => (
+                <div key={label} className="rounded-md border border-cream/10 bg-cream/[0.04] px-3 py-3">
+                  <p className="text-xs font-semibold text-cream">{label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : null}
       </div>
     </div>
   );
@@ -614,12 +802,12 @@ function ProjectPreview({ accent, title }: { accent: string; title: string }) {
 
 function Work() {
   return (
-    <Reveal id="work" className="bg-cream/[0.018] px-5 py-24 sm:px-6 lg:px-8">
+    <Reveal id="work" className="bg-cream/[0.018] px-5 py-12 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
       <div className="mx-auto max-w-7xl">
         <SectionHeader
           eyebrow="Featured work"
-          title="Real projects with scale, data, maps, performance, and practical business UX."
-          copy="The portfolio blends software engineering depth with local-business clarity: fast pages, useful interfaces, clean information architecture, and measurable technical foundations."
+          title="Real projects with data, maps, and performance behind them."
+          copy="A mix of software engineering depth and small-business clarity: fast pages, useful interfaces, clean structure, and measurable technical foundations."
         />
         <div className="grid gap-5 lg:grid-cols-3">
           {projects.map((project) => (
@@ -627,7 +815,7 @@ function Work() {
               key={project.title}
               className="glass-card group overflow-hidden transition duration-300 hover:-translate-y-1 hover:border-gold/35"
             >
-              <ProjectPreview accent={project.accent} title={project.title} />
+              <ProjectPreview project={project} />
               <div className="p-6">
                 <h3 className="text-2xl font-semibold text-cream">{project.title}</h3>
                 <p className="mt-3 text-pretty text-sm leading-7 text-muted">{project.description}</p>
@@ -668,7 +856,7 @@ function WhyCustom() {
   ];
 
   return (
-    <Reveal className="px-5 py-24 sm:px-6 lg:px-8">
+    <Reveal className="px-5 py-12 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
       <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
         <div>
           <p className="mb-3 text-sm font-semibold uppercase text-gold">Why custom-coded</p>
@@ -698,7 +886,7 @@ function WhyCustom() {
 
 function Process() {
   return (
-    <Reveal id="process" className="px-5 py-24 sm:px-6 lg:px-8">
+    <Reveal id="process" className="px-5 py-12 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
       <div className="mx-auto max-w-7xl">
         <SectionHeader
           eyebrow="Process"
@@ -724,7 +912,7 @@ function Process() {
 
 function Packages() {
   return (
-    <Reveal className="bg-cream/[0.018] px-5 py-24 sm:px-6 lg:px-8">
+    <Reveal className="bg-cream/[0.018] px-5 py-12 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
       <div className="mx-auto max-w-7xl">
         <SectionHeader
           eyebrow="Ways I can help"
@@ -773,7 +961,7 @@ function About() {
   ];
 
   return (
-    <Reveal className="px-5 py-24 sm:px-6 lg:px-8">
+    <Reveal className="px-5 py-12 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
       <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
         <div className="relative">
           <div className="mesh-panel overflow-hidden rounded-lg border border-cream/12 p-4 shadow-[0_28px_90px_rgba(0,0,0,0.42)]">
@@ -822,7 +1010,7 @@ function About() {
 
 function FAQ() {
   return (
-    <Reveal id="faq" className="bg-cream/[0.018] px-5 py-24 sm:px-6 lg:px-8">
+    <Reveal id="faq" className="bg-cream/[0.018] px-5 py-12 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
       <div className="mx-auto max-w-4xl">
         <SectionHeader
           eyebrow="FAQ"
@@ -854,7 +1042,7 @@ function Contact() {
   const [submitted, setSubmitted] = useState(false);
 
   return (
-    <Reveal id="contact" className="px-5 py-24 sm:px-6 lg:px-8">
+    <Reveal id="contact" className="px-5 py-12 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
       <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
         <div>
           <p className="mb-3 text-sm font-semibold uppercase text-gold">Start a project</p>
@@ -869,11 +1057,11 @@ function Contact() {
           <div className="mt-8 space-y-4">
             {/* TODO: Replace hello@example.com with Curtis's real project email before launch. */}
             <a
-              href="mailto:hello@example.com"
+              href="mailto:cmbitton@gmail.com"
               className="inline-flex items-center gap-3 rounded-md border border-cream/12 bg-cream/[0.04] px-4 py-3 text-cream transition hover:border-emerald/45 hover:text-emerald"
             >
               <Mail aria-hidden="true" className="size-5" />
-              hello@example.com
+              cmbitton@gmail.com
             </a>
             <p className="text-sm leading-6 text-soft">
               Currently accepting a limited number of local/founding-client
@@ -1019,7 +1207,7 @@ export default function LandingPage() {
   return (
     <>
       <Header />
-      <main>
+      <main className="site-shell">
         <Hero />
         <TrustStrip />
         <Services />

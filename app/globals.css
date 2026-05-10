@@ -47,19 +47,6 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-body::before {
-  position: fixed;
-  inset: 0;
-  z-index: -2;
-  content: "";
-  pointer-events: none;
-  background-image:
-    linear-gradient(rgba(247, 239, 224, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(247, 239, 224, 0.035) 1px, transparent 1px);
-  background-size: 72px 72px;
-  mask-image: linear-gradient(to bottom, black 0%, transparent 82%);
-}
-
 body::after {
   position: fixed;
   inset: 0;
@@ -75,6 +62,37 @@ body::after {
       transparent 1px,
       transparent 13px
     );
+}
+
+.site-shell {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.site-shell::before {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  content: "";
+  pointer-events: none;
+  opacity: 0.5;
+  background:
+    linear-gradient(128deg, transparent 0 18%, rgba(79, 211, 182, 0.045) 18% 18.14%, transparent 18.14% 46%, rgba(213, 170, 95, 0.035) 46% 46.12%, transparent 46.12% 100%),
+    linear-gradient(36deg, transparent 0 64%, rgba(247, 239, 224, 0.024) 64% 64.1%, transparent 64.1% 100%),
+    linear-gradient(180deg, rgba(247, 239, 224, 0.018), transparent 18%, rgba(79, 211, 182, 0.018) 48%, transparent 78%);
+}
+
+.hero-stage::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  content: "";
+  pointer-events: none;
+  background:
+    linear-gradient(150deg, transparent 0 58%, rgba(79, 211, 182, 0.055) 58% 58.28%, transparent 58.28% 100%),
+    linear-gradient(24deg, transparent 0 72%, rgba(213, 170, 95, 0.045) 72% 72.24%, transparent 72.24% 100%),
+    linear-gradient(180deg, rgba(14, 16, 12, 0.18), transparent 62%);
 }
 
 ::selection {
@@ -121,10 +139,7 @@ textarea {
 }
 
 .data-grid {
-  background-image:
-    linear-gradient(rgba(247, 239, 224, 0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(247, 239, 224, 0.07) 1px, transparent 1px);
-  background-size: 34px 34px;
+  background-image: none;
 }
 
 .text-balance {
@@ -133,6 +148,14 @@ textarea {
 
 .text-pretty {
   text-wrap: pretty;
+}
+
+@media (max-width: 767px) {
+  main > section:not(#top),
+  main > section:not(#top) * {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
