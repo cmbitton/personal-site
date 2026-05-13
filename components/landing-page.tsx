@@ -1076,46 +1076,54 @@ function Contact() {
           className="glass-card p-5 sm:p-6"
           onSubmit={async (event) => {
             event.preventDefault();
-            const formData = new FormData(event.currentTarget);
+            const form = event.currentTarget;
+            const formData = new FormData(form);
             const getValue = (name: string) =>
               String(formData.get(name) ?? "").trim();
 
             setSubmitStatus("submitting");
             setSubmitMessage("");
 
-            const response = await fetch("/api/contact", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json"
-              },
-              body: JSON.stringify({
-                name: getValue("name"),
-                email: getValue("email"),
-                business: getValue("business"),
-                website: getValue("website"),
-                need: getValue("need"),
-                budget: getValue("budget"),
-                message: getValue("message"),
-                companyWebsite: getValue("companyWebsite")
-              })
-            });
+            try {
+              const response = await fetch("/api/contact", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                  name: getValue("name"),
+                  email: getValue("email"),
+                  business: getValue("business"),
+                  website: getValue("website"),
+                  need: getValue("need"),
+                  budget: getValue("budget"),
+                  message: getValue("message"),
+                  companyWebsite: getValue("companyWebsite")
+                })
+              });
 
-            if (!response.ok) {
-              const result = (await response.json().catch(() => null)) as {
-                error?: string;
-              } | null;
+              if (!response.ok) {
+                const result = (await response.json().catch(() => null)) as {
+                  error?: string;
+                } | null;
 
+                setSubmitStatus("error");
+                setSubmitMessage(
+                  result?.error ??
+                    `The form could not be sent. Please email ${contactEmail}.`
+                );
+                return;
+              }
+
+              form.reset();
+              setSubmitStatus("success");
+              setSubmitMessage("Thanks. I’ll review this and reply by email.");
+            } catch {
               setSubmitStatus("error");
               setSubmitMessage(
-                result?.error ??
-                  `The form could not be sent. Please email ${contactEmail}.`
+                `The form could not be sent. Please email ${contactEmail}.`
               );
-              return;
             }
-
-            event.currentTarget.reset();
-            setSubmitStatus("success");
-            setSubmitMessage("Thanks. I’ll review this and reply by email.");
           }}
         >
           <label className="hidden" aria-hidden="true">
@@ -1219,7 +1227,9 @@ function Contact() {
             <Send aria-hidden="true" className="size-4" />
             {submitStatus === "submitting"
               ? "Sending..."
-              : "Tell me about your project"}
+              : submitStatus === "success"
+                ? "Message sent"
+                : "Tell me about your project"}
           </button>
           <p
             aria-live="polite"
