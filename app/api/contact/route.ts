@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { contactEmail, siteName } from "@/lib/site";
+import { contactEmail } from "@/lib/site";
 
 export const runtime = "nodejs";
 
@@ -23,6 +23,22 @@ function toCleanString(value: unknown, maxLength = 500) {
   }
 
   return value.replace(/\s+/g, " ").trim().slice(0, maxLength);
+}
+
+function toCleanEnvValue(value: string | undefined) {
+  if (!value) {
+    return "";
+  }
+
+  const trimmed = value.trim();
+  const first = trimmed.at(0);
+  const last = trimmed.at(-1);
+
+  if ((first === "\"" && last === "\"") || (first === "'" && last === "'")) {
+    return trimmed.slice(1, -1).trim();
+  }
+
+  return trimmed;
 }
 
 function toCleanMessage(value: unknown) {
@@ -51,14 +67,20 @@ function field(label: string, value: string) {
 }
 
 export async function POST(request: Request) {
-  const resendApiKey = process.env.RESEND_API_KEY;
-  const toEmail = process.env.CONTACT_TO_EMAIL ?? contactEmail;
-  const fromEmail =
-    process.env.CONTACT_FROM_EMAIL ?? `${siteName} <onboarding@resend.dev>`;
+  const resendApiKey = toCleanEnvValue(process.env.RESEND_API_KEY);
+  const toEmail = toCleanEnvValue(process.env.CONTACT_TO_EMAIL) || contactEmail;
+  const fromEmail = toCleanEnvValue(process.env.CONTACT_FROM_EMAIL);
 
   if (!resendApiKey) {
     return NextResponse.json(
       { error: "Contact form is not configured yet." },
+      { status: 503 }
+    );
+  }
+
+  if (!fromEmail) {
+    return NextResponse.json(
+      { error: "Contact form sender is not configured yet." },
       { status: 503 }
     );
   }
@@ -143,6 +165,14 @@ export async function POST(request: Request) {
   });
 
   if (!response.ok) {
+    const resendError = await response.text().catch(() => "");
+    console.error("Resend contact form send failed", {
+      status: response.status,
+      fromEmail,
+      toEmail,
+      body: resendError
+    });
+
     return NextResponse.json(
       { error: "The message could not be sent. Please email me directly." },
       { status: 502 }
