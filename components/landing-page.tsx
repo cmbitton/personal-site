@@ -1,5 +1,6 @@
 "use client";
 
+import { contactEmail } from "@/lib/site";
 import Image from "next/image";
 import {
   ArrowRight,
@@ -197,7 +198,7 @@ const packages = [
   },
   {
     title: "Business Website",
-    bestFor: "Best for service businesses that need a stronger online home.",
+    bestFor: "Best for businesses that need a stronger online home.",
     deliverables: [
       "Multi-section or multi-page site",
       "Conversion-focused copy structure",
@@ -376,7 +377,7 @@ function HeroVisual() {
             {[
               ["Performance budget", "passed"],
               ["SEO metadata", "ready"],
-              ["Analytics setup", "queued"],
+              ["Analytics setup", "ready"],
               ["Lead form path", "clear"]
             ].map(([label, value]) => (
               <div
@@ -391,10 +392,9 @@ function HeroVisual() {
         </div>
       </div>
 
-      <div className="glass-card absolute bottom-28 left-0 w-[245px] max-w-[72%] p-4 sm:bottom-16 sm:max-w-none">
+      <div className="glass-card absolute bottom-28 left-0 w-[245px] max-w-[72%] p-4 !shadow-none sm:bottom-16 sm:max-w-none">
         <div className="flex items-center gap-3">
           <div className="relative size-16 overflow-hidden rounded-md border border-emerald/35 bg-panel">
-            {/* TODO: Swap in an optimized higher-resolution headshot when available. */}
             <Image
               src="/headshot.jpg"
               alt=""
@@ -450,7 +450,7 @@ function HeroVisual() {
 
       <div className="absolute right-3 top-0 flex items-center gap-2 rounded-md border border-gold/25 bg-gold/10 px-3 py-2 text-sm font-semibold text-gold shadow-[0_0_38px_rgba(213,170,95,0.14)]">
         <Sparkles className="size-4" />
-        Premium, not precious
+        Polished, practical sites
       </div>
     </motion.div>
   );
@@ -514,7 +514,7 @@ function Hero() {
             className="mb-5 inline-flex items-center gap-3 rounded-full border border-emerald/25 bg-emerald/10 px-4 py-2 text-sm text-emerald sm:mb-6"
           >
             <span className="size-2 rounded-full bg-emerald shadow-[0_0_18px_rgba(79,211,182,0.8)]" />
-            Limited local/founding-client projects open
+            Limited local projects open
           </motion.div>
 
           <motion.h1
@@ -833,6 +833,7 @@ function Work() {
                   href={project.url}
                   target="_blank"
                   rel="noreferrer"
+                  aria-label={`Visit ${project.title} live site`}
                   className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-emerald transition hover:text-cream"
                 >
                   Visit live site
@@ -871,11 +872,11 @@ function WhyCustom() {
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
           {benefits.map((benefit, index) => (
-            <div key={benefit} className="glass-card p-6">
-              <div className="mb-5 flex size-10 items-center justify-center rounded-md border border-gold/25 bg-gold/10 text-sm font-bold text-gold">
-                {index + 1}
-              </div>
-              <p className="text-pretty text-base leading-7 text-cream">{benefit}</p>
+            <div key={benefit} className="glass-card relative p-6">
+              <span className="absolute right-5 top-5 text-xs font-semibold text-gold/75">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <p className="pr-8 text-pretty text-base leading-7 text-cream">{benefit}</p>
             </div>
           ))}
         </div>
@@ -917,17 +918,19 @@ function Packages() {
         <SectionHeader
           eyebrow="Ways I can help"
           title="Flexible project shapes without public one-size-fits-all pricing."
-          copy="Every business is different, so I quote based on scope. I’m currently accepting a limited number of local and founding-client projects."
+          copy="Every business is different, so I quote based on scope. I’m currently accepting a limited number of local business projects."
         />
         <div className="grid gap-5 lg:grid-cols-3">
           {packages.map((item, index) => (
             <article
               key={item.title}
-              className={`glass-card p-6 ${index === 1 ? "border-emerald/35 shadow-[0_24px_90px_rgba(79,211,182,0.12)]" : ""}`}
+              className={`glass-card flex h-full flex-col p-6 ${index === 1 ? "border-emerald/35 shadow-[0_24px_90px_rgba(79,211,182,0.12)]" : ""}`}
             >
-              <p className="text-sm font-semibold text-gold">{item.bestFor}</p>
-              <h3 className="mt-4 text-2xl font-semibold text-cream">{item.title}</h3>
-              <ul className="mt-6 space-y-3">
+              <div className="lg:min-h-[6.5rem]">
+                <p className="text-sm font-semibold leading-6 text-gold">{item.bestFor}</p>
+                <h3 className="mt-4 text-2xl font-semibold text-cream">{item.title}</h3>
+              </div>
+              <ul className="mt-6 flex-1 space-y-3">
                 {item.deliverables.map((deliverable) => (
                   <li key={deliverable} className="flex gap-3 text-sm leading-6 text-muted">
                     <CheckCircle2 aria-hidden="true" className="mt-1 size-4 shrink-0 text-emerald" />
@@ -963,16 +966,15 @@ function About() {
   return (
     <Reveal className="px-5 py-12 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
       <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
-        <div className="relative">
-          <div className="mesh-panel overflow-hidden rounded-lg border border-cream/12 p-4 shadow-[0_28px_90px_rgba(0,0,0,0.42)]">
+        <div className="relative mx-auto w-full max-w-[400px] lg:mx-0">
+          <div className="mesh-panel overflow-hidden rounded-lg border border-cream/12 p-4">
             <div className="relative aspect-square overflow-hidden rounded-md border border-emerald/25 bg-panel">
-              {/* TODO: Replace with a sharper production headshot if/when one is available. */}
               <Image
                 src="/headshot.jpg"
                 alt="Curtis Bitton"
                 width={400}
                 height={400}
-                sizes="(min-width: 1024px) 360px, 80vw"
+                sizes="(min-width: 1024px) 400px, 80vw"
                 className="h-full w-full object-cover"
               />
             </div>
@@ -1025,7 +1027,7 @@ function FAQ() {
             >
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-left text-base font-semibold text-cream">
                 {faq.question}
-                <span className="flex size-8 shrink-0 items-center justify-center rounded-md border border-cream/10 text-emerald transition group-open:rotate-45">
+                <span aria-hidden="true" className="flex size-8 shrink-0 items-center justify-center rounded-md border border-cream/10 text-emerald transition group-open:rotate-45">
                   +
                 </span>
               </summary>
@@ -1039,7 +1041,8 @@ function FAQ() {
 }
 
 function Contact() {
-  const [submitted, setSubmitted] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [submitMessage, setSubmitMessage] = useState("");
 
   return (
     <Reveal id="contact" className="px-5 py-12 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
@@ -1055,30 +1058,74 @@ function Contact() {
             polished, fast, and useful.
           </p>
           <div className="mt-8 space-y-4">
-            {/* TODO: Replace hello@example.com with Curtis's real project email before launch. */}
             <a
-              href="mailto:cmbitton@gmail.com"
+              href={`mailto:${contactEmail}`}
               className="inline-flex items-center gap-3 rounded-md border border-cream/12 bg-cream/[0.04] px-4 py-3 text-cream transition hover:border-emerald/45 hover:text-emerald"
             >
               <Mail aria-hidden="true" className="size-5" />
-              cmbitton@gmail.com
+              {contactEmail}
             </a>
             <p className="text-sm leading-6 text-soft">
-              Currently accepting a limited number of local/founding-client
-              projects for small businesses, service providers, and local
-              professionals.
+              Currently accepting a limited number of local business projects
+              for small businesses, service providers, and local professionals.
             </p>
           </div>
         </div>
 
         <form
           className="glass-card p-5 sm:p-6"
-          onSubmit={(event) => {
+          onSubmit={async (event) => {
             event.preventDefault();
-            setSubmitted(true);
+            const formData = new FormData(event.currentTarget);
+            const getValue = (name: string) =>
+              String(formData.get(name) ?? "").trim();
+
+            setSubmitStatus("submitting");
+            setSubmitMessage("");
+
+            const response = await fetch("/api/contact", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                name: getValue("name"),
+                email: getValue("email"),
+                business: getValue("business"),
+                website: getValue("website"),
+                need: getValue("need"),
+                budget: getValue("budget"),
+                message: getValue("message"),
+                companyWebsite: getValue("companyWebsite")
+              })
+            });
+
+            if (!response.ok) {
+              const result = (await response.json().catch(() => null)) as {
+                error?: string;
+              } | null;
+
+              setSubmitStatus("error");
+              setSubmitMessage(
+                result?.error ??
+                  `The form could not be sent. Please email ${contactEmail}.`
+              );
+              return;
+            }
+
+            event.currentTarget.reset();
+            setSubmitStatus("success");
+            setSubmitMessage("Thanks. I’ll review this and reply by email.");
           }}
         >
-          {/* TODO: Connect this frontend-only form to Formspree, Resend, EmailJS, Netlify Forms, or a Next.js API route before launch. */}
+          <label className="hidden" aria-hidden="true">
+            Company website
+            <input
+              name="companyWebsite"
+              tabIndex={-1}
+              autoComplete="off"
+            />
+          </label>
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="block">
               <span className="mb-2 block text-sm font-medium text-cream">Name</span>
@@ -1166,15 +1213,19 @@ function Contact() {
           </label>
           <button
             type="submit"
-            className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-md bg-emerald px-5 py-3.5 font-semibold text-[#070806] transition hover:-translate-y-1 hover:bg-cream"
+            disabled={submitStatus === "submitting"}
+            className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-md bg-emerald px-5 py-3.5 font-semibold text-[#070806] transition hover:-translate-y-1 hover:bg-cream disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:translate-y-0 disabled:hover:bg-emerald"
           >
             <Send aria-hidden="true" className="size-4" />
-            Tell me about your project
+            {submitStatus === "submitting"
+              ? "Sending..."
+              : "Tell me about your project"}
           </button>
-          <p aria-live="polite" className="mt-4 min-h-6 text-sm text-emerald">
-            {submitted
-              ? "Thanks. The form is ready for a provider connection before launch."
-              : ""}
+          <p
+            aria-live="polite"
+            className={`mt-4 min-h-6 text-sm ${submitStatus === "error" ? "text-copper" : "text-emerald"}`}
+          >
+            {submitMessage}
           </p>
         </form>
       </div>

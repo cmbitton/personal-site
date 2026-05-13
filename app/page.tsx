@@ -1,15 +1,13 @@
 import LandingPage from "@/components/landing-page";
-
-// TODO: Replace this with the final production domain before launch.
-const siteUrl = "https://curtisbittonwebdesign.com";
+import { contactEmail, siteName, siteUrl } from "@/lib/site";
 
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": ["ProfessionalService", "LocalBusiness"],
-  name: "Curtis Bitton Web Design",
+  name: siteName,
   url: siteUrl,
   image: `${siteUrl}/headshot.jpg`,
-  email: "hello@example.com",
+  email: contactEmail,
   description:
     "Custom-coded websites, landing pages, technical SEO setup, hosting support, analytics setup, and ongoing maintenance for small businesses and local professionals.",
   founder: {
@@ -38,11 +36,6 @@ const jsonLd = {
     "PostgreSQL",
     "Automation",
     "ETL"
-  ],
-  sameAs: [
-    "https://forkgrade.com",
-    "https://inspectri.com",
-    "https://cmbitton.github.io/gianni-site-demo/"
   ]
 };
 

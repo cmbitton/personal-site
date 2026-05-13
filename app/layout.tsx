@@ -1,8 +1,6 @@
 import type { Metadata, Viewport } from "next";
+import { siteName, siteUrl } from "@/lib/site";
 import "./globals.css";
-
-// TODO: Replace this with the final production domain before launch.
-const siteUrl = "https://curtisbittonwebdesign.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -11,11 +9,11 @@ export const metadata: Metadata = {
     template: "%s | Curtis Bitton Web Design"
   },
   description:
-    "Premium custom-coded websites for small businesses, local professionals, and service providers. Built fast, modern, SEO-ready, and handled end to end.",
-  applicationName: "Curtis Bitton Web Design",
+    "Custom-coded websites for small businesses, local professionals, and service providers. Built fast, modern, SEO-ready, and handled end to end.",
+  applicationName: siteName,
   authors: [{ name: "Curtis Bitton" }],
   creator: "Curtis Bitton",
-  publisher: "Curtis Bitton Web Design",
+  publisher: siteName,
   keywords: [
     "Rhode Island web designer",
     "small business web design",
@@ -33,28 +31,28 @@ export const metadata: Metadata = {
     shortcut: "/favicon.svg"
   },
   openGraph: {
-    title: "Curtis Bitton Web Design",
+    title: siteName,
     description:
       "Fast, modern, custom-coded websites for small businesses that need to look professional and turn visitors into calls, bookings, and leads.",
     url: "/",
-    siteName: "Curtis Bitton Web Design",
+    siteName,
     locale: "en_US",
     type: "website",
     images: [
       {
-        url: "/headshot.jpg",
-        width: 400,
-        height: 400,
-        alt: "Curtis Bitton"
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "Curtis Bitton Web Design"
       }
     ]
   },
   twitter: {
     card: "summary_large_image",
-    title: "Curtis Bitton Web Design",
+    title: siteName,
     description:
       "Fast, modern, custom-coded websites for small businesses and local professionals.",
-    images: ["/headshot.jpg"]
+    images: ["/opengraph-image"]
   },
   robots: {
     index: true,
