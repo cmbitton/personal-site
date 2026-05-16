@@ -1,6 +1,9 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import { siteName, siteUrl } from "@/lib/site";
 import "./globals.css";
+
+const googleAnalyticsId = "G-RDCEX3BX11";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -74,6 +77,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <Script
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', '${googleAnalyticsId}');
+          `}
+        </Script>
+      </head>
       <body>{children}</body>
     </html>
   );
