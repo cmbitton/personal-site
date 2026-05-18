@@ -1,5 +1,3 @@
-"use client";
-
 import { contactEmail } from "@/lib/site";
 import Image from "next/image";
 import {
@@ -30,8 +28,7 @@ import {
   Wrench
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { motion, useReducedMotion } from "framer-motion";
-import { useState } from "react";
+import ContactForm from "./contact-form";
 
 const navItems = [
   { label: "Services", href: "#services" },
@@ -344,15 +341,10 @@ function Header() {
 }
 
 function HeroVisual() {
-  const reduceMotion = useReducedMotion();
-
   return (
-    <motion.div
+    <div
       aria-hidden="true"
-      className="relative mx-auto hidden min-h-[520px] w-full max-w-[560px] lg:block"
-      initial={reduceMotion ? false : { opacity: 0, x: 22 }}
-      animate={reduceMotion ? undefined : { opacity: 1, x: 0 }}
-      transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+      className="animate-fade-in-right relative mx-auto hidden min-h-[520px] w-full max-w-[560px] lg:block"
     >
       <div className="absolute left-0 right-0 top-8 h-[330px] overflow-hidden rounded-lg border border-cream/12 bg-ink-soft shadow-[0_28px_90px_rgba(0,0,0,0.46)] sm:left-4 sm:right-8">
         <div className="flex h-11 items-center justify-between border-b border-cream/10 bg-cream/[0.04] px-4">
@@ -452,7 +444,7 @@ function HeroVisual() {
         <Sparkles className="size-4" />
         Polished, practical sites
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -507,31 +499,24 @@ function Hero() {
     <section id="top" className="hero-stage relative overflow-hidden pt-24 sm:pt-28 lg:pt-32">
       <div className="mx-auto grid max-w-7xl items-center gap-10 px-5 pb-12 sm:px-6 sm:pb-20 lg:grid-cols-[1.03fr_0.97fr] lg:px-8 lg:pb-28">
         <div>
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, ease: "easeOut" }}
-            className="mb-5 inline-flex items-center gap-3 rounded-full border border-emerald/25 bg-emerald/10 px-4 py-2 text-sm text-emerald sm:mb-6"
+          <div
+            className="animate-fade-up-fast mb-5 inline-flex items-center gap-3 rounded-full border border-emerald/25 bg-emerald/10 px-4 py-2 text-sm text-emerald sm:mb-6"
           >
             <span className="size-2 rounded-full bg-emerald shadow-[0_0_18px_rgba(79,211,182,0.8)]" />
             Limited local projects open
-          </motion.div>
+          </div>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: "easeOut", delay: 0.06 }}
-            className="text-balance text-[2.75rem] font-semibold leading-[0.98] text-cream sm:text-6xl lg:text-7xl"
+          <h1
+            className="animate-fade-up text-balance text-[2.75rem] font-semibold leading-[0.98] text-cream sm:text-6xl lg:text-7xl"
+            style={{ animationDelay: "0.06s" }}
           >
             <span className="sm:hidden">Fast, modern websites for small businesses.</span>
             <span className="hidden sm:inline">I build fast, modern websites for small businesses.</span>
-          </motion.h1>
+          </h1>
 
-          <motion.p
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: "easeOut", delay: 0.14 }}
-            className="mt-5 max-w-2xl text-pretty text-base leading-7 text-muted sm:mt-6 sm:text-xl sm:leading-8"
+          <p
+            className="animate-fade-up mt-5 max-w-2xl text-pretty text-base leading-7 text-muted sm:mt-6 sm:text-xl sm:leading-8"
+            style={{ animationDelay: "0.14s" }}
           >
             <span className="sm:hidden">
               Custom-coded sites that look polished, load fast, and turn visitors into calls.
@@ -540,15 +525,13 @@ function Hero() {
               Custom-coded websites that help local businesses look professional,
               load fast, and turn visitors into calls, bookings, and leads.
             </span>
-          </motion.p>
+          </p>
 
           <MobileHeroSnapshot />
 
-          <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: "easeOut", delay: 0.22 }}
-            className="mt-6 flex flex-col gap-3 sm:mt-9 sm:flex-row"
+          <div
+            className="animate-fade-up mt-6 flex flex-col gap-3 sm:mt-9 sm:flex-row"
+            style={{ animationDelay: "0.22s" }}
           >
             <a
               href="#contact"
@@ -565,13 +548,11 @@ function Hero() {
               <ExternalLink aria-hidden="true" className="size-4" />
               View work
             </a>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: "easeOut", delay: 0.3 }}
-            className="mt-6 hidden max-w-2xl grid-cols-1 gap-3 sm:mt-9 sm:grid sm:grid-cols-2"
+          <div
+            className="animate-fade-up mt-6 hidden max-w-2xl grid-cols-1 gap-3 sm:mt-9 sm:grid sm:grid-cols-2"
+            style={{ animationDelay: "0.3s" }}
           >
             {credibility.map((item) => (
               <div
@@ -582,7 +563,7 @@ function Hero() {
                 {item}
               </div>
             ))}
-          </motion.div>
+          </div>
         </div>
 
         <HeroVisual />
@@ -865,7 +846,7 @@ function WhyCustom() {
             A polished website without wrestling templates, plugins, hosting, or SEO setup.
           </h2>
           <p className="mt-6 text-pretty text-lg leading-8 text-muted">
-            Website builders are fine for DIY. I’m for business owners who want
+            Website builders are fine for DIY. I&apos;m for business owners who want
             a polished, fast, professionally built site without having to wrestle
             with templates, plugins, hosting, analytics, or SEO setup.
           </p>
@@ -918,7 +899,7 @@ function Packages() {
         <SectionHeader
           eyebrow="Ways I can help"
           title="Flexible project shapes without public one-size-fits-all pricing."
-          copy="Every business is different, so I quote based on scope. I’m currently accepting a limited number of local business projects."
+          copy="Every business is different, so I quote based on scope. I'm currently accepting a limited number of local business projects."
         />
         <div className="grid gap-5 lg:grid-cols-3">
           {packages.map((item, index) => (
@@ -987,7 +968,7 @@ function About() {
             A software engineer building practical, premium websites for local businesses.
           </h2>
           <p className="mt-6 text-pretty text-lg leading-8 text-muted">
-            I’m Curtis, a software engineer based in Rhode Island/New England,
+            I&apos;m Curtis, a software engineer based in Rhode Island/New England,
             helping small businesses get clean, fast, professional websites.
             I bring 3 years of professional software engineering experience,
             full-stack TypeScript and Python, database work, data/SEO projects,
@@ -1041,9 +1022,6 @@ function FAQ() {
 }
 
 function Contact() {
-  const [submitStatus, setSubmitStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
-  const [submitMessage, setSubmitMessage] = useState("");
-
   return (
     <Reveal id="contact" className="px-5 py-12 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
       <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
@@ -1053,7 +1031,7 @@ function Contact() {
             Have a business that needs a better online presence?
           </h2>
           <p className="mt-6 text-pretty text-lg leading-8 text-muted">
-            Tell me what you’re working on. I’ll help you sort the right scope,
+            Tell me what you&apos;re working on. I&apos;ll help you sort the right scope,
             the smartest next step, and what it would take to launch something
             polished, fast, and useful.
           </p>
@@ -1072,172 +1050,7 @@ function Contact() {
           </div>
         </div>
 
-        <form
-          className="glass-card p-5 sm:p-6"
-          onSubmit={async (event) => {
-            event.preventDefault();
-            const form = event.currentTarget;
-            const formData = new FormData(form);
-            const getValue = (name: string) =>
-              String(formData.get(name) ?? "").trim();
-
-            setSubmitStatus("submitting");
-            setSubmitMessage("");
-
-            try {
-              const response = await fetch("/api/contact", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                  name: getValue("name"),
-                  email: getValue("email"),
-                  business: getValue("business"),
-                  website: getValue("website"),
-                  need: getValue("need"),
-                  budget: getValue("budget"),
-                  message: getValue("message"),
-                  companyWebsite: getValue("companyWebsite")
-                })
-              });
-
-              if (!response.ok) {
-                const result = (await response.json().catch(() => null)) as {
-                  error?: string;
-                } | null;
-
-                setSubmitStatus("error");
-                setSubmitMessage(
-                  result?.error ??
-                    `The form could not be sent. Please email ${contactEmail}.`
-                );
-                return;
-              }
-
-              form.reset();
-              setSubmitStatus("success");
-              setSubmitMessage("Thanks. I’ll review this and reply by email.");
-            } catch {
-              setSubmitStatus("error");
-              setSubmitMessage(
-                `The form could not be sent. Please email ${contactEmail}.`
-              );
-            }
-          }}
-        >
-          <label className="hidden" aria-hidden="true">
-            Company website
-            <input
-              name="companyWebsite"
-              tabIndex={-1}
-              autoComplete="off"
-            />
-          </label>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <label className="block">
-              <span className="mb-2 block text-sm font-medium text-cream">Name</span>
-              <input
-                required
-                name="name"
-                autoComplete="name"
-                className="w-full rounded-md border border-cream/12 bg-ink/65 px-4 py-3 text-cream placeholder:text-soft transition focus:border-emerald"
-                placeholder="Your name"
-              />
-            </label>
-            <label className="block">
-              <span className="mb-2 block text-sm font-medium text-cream">Email</span>
-              <input
-                required
-                type="email"
-                name="email"
-                autoComplete="email"
-                className="w-full rounded-md border border-cream/12 bg-ink/65 px-4 py-3 text-cream placeholder:text-soft transition focus:border-emerald"
-                placeholder="you@business.com"
-              />
-            </label>
-            <label className="block">
-              <span className="mb-2 block text-sm font-medium text-cream">Business name</span>
-              <input
-                required
-                name="business"
-                autoComplete="organization"
-                className="w-full rounded-md border border-cream/12 bg-ink/65 px-4 py-3 text-cream placeholder:text-soft transition focus:border-emerald"
-                placeholder="Business or project"
-              />
-            </label>
-            <label className="block">
-              <span className="mb-2 block text-sm font-medium text-cream">Website, optional</span>
-              <input
-                type="url"
-                name="website"
-                autoComplete="url"
-                className="w-full rounded-md border border-cream/12 bg-ink/65 px-4 py-3 text-cream placeholder:text-soft transition focus:border-emerald"
-                placeholder="https://"
-              />
-            </label>
-            <label className="block">
-              <span className="mb-2 block text-sm font-medium text-cream">What do you need help with?</span>
-              <select
-                required
-                name="need"
-                className="w-full rounded-md border border-cream/12 bg-ink/65 px-4 py-3 text-cream transition focus:border-emerald"
-                defaultValue=""
-              >
-                <option value="" disabled>
-                  Select one
-                </option>
-                <option>New small business website</option>
-                <option>Website redesign</option>
-                <option>Landing page</option>
-                <option>Portfolio or content site</option>
-                <option>Custom web app</option>
-                <option>Ongoing support</option>
-              </select>
-            </label>
-            <label className="block">
-              <span className="mb-2 block text-sm font-medium text-cream">Budget range, optional</span>
-              <select
-                name="budget"
-                className="w-full rounded-md border border-cream/12 bg-ink/65 px-4 py-3 text-cream transition focus:border-emerald"
-                defaultValue=""
-              >
-                <option value="">Not sure yet</option>
-                <option>Starter scope</option>
-                <option>Business website scope</option>
-                <option>Custom build or ongoing work</option>
-              </select>
-            </label>
-          </div>
-          <label className="mt-4 block">
-            <span className="mb-2 block text-sm font-medium text-cream">Message</span>
-            <textarea
-              required
-              name="message"
-              rows={6}
-              className="w-full resize-y rounded-md border border-cream/12 bg-ink/65 px-4 py-3 text-cream placeholder:text-soft transition focus:border-emerald"
-              placeholder="Tell me about your business, what you need, and where your current website is falling short."
-            />
-          </label>
-          <button
-            type="submit"
-            disabled={submitStatus === "submitting"}
-            className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-md bg-emerald px-5 py-3.5 font-semibold text-[#070806] transition hover:-translate-y-1 hover:bg-cream disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:translate-y-0 disabled:hover:bg-emerald"
-          >
-            <Send aria-hidden="true" className="size-4" />
-            {submitStatus === "submitting"
-              ? "Sending..."
-              : submitStatus === "success"
-                ? "Message sent"
-                : "Tell me about your project"}
-          </button>
-          <p
-            aria-live="polite"
-            className={`mt-4 min-h-6 text-sm ${submitStatus === "error" ? "text-copper" : "text-emerald"}`}
-          >
-            {submitMessage}
-          </p>
-        </form>
+        <ContactForm />
       </div>
     </Reveal>
   );
